@@ -10,7 +10,16 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            
+            // AllTest();
+            CarManager carManager = new CarManager(new EfCarDal());
+            foreach (var car in carManager.GetCarDetails())
+            {
+                Console.WriteLine($"Model:{car.CarName} - Brand:{car.BrandName} - Color:{car.ColorName} - DailyPrice:{car.DailyPrice}");
+            }
+        }
+
+        private static void AllTest()
+        {
             Console.WriteLine("------Brands------");
 
             var brandManager = new BrandManager(new EfBrandDal());
@@ -34,17 +43,31 @@ namespace ConsoleUI
             {
                 Console.WriteLine($"{color.ColorId} {color.ColorName}");
             }
-            
+
             Console.WriteLine("------Cars------");
 
             var carManager = new CarManager(new EfCarDal());
-            carManager.Add(new Car {CarId = 1, BrandId = 1, CarName = "iX3", ColorId = 1, DailyPrice = 400, ModelYear = 2021, Description = "Lorem ipsum dolor sit amet"});
-            carManager.Add(new Car {CarId = 2, BrandId = 2, CarName = "A 200 AMG", ColorId = 2, DailyPrice = 600, ModelYear = 2021, Description = "Lorem ipsum dolor sit amet"});
-            carManager.Add(new Car {CarId = 3, BrandId = 3, CarName = "Volvo XC90 Recharge", ColorId = 3, DailyPrice = 1100, ModelYear = 2021, Description = "Lorem ipsum dolor sit amet"});
+            carManager.Add(new Car
+            {
+                CarId = 1, BrandId = 1, CarName = "iX3", ColorId = 1, DailyPrice = 400, ModelYear = 2021,
+                Description = "Lorem ipsum dolor sit amet"
+            });
+            carManager.Add(new Car
+            {
+                CarId = 2, BrandId = 2, CarName = "A 200 AMG", ColorId = 2, DailyPrice = 600, ModelYear = 2021,
+                Description = "Lorem ipsum dolor sit amet"
+            });
+            carManager.Add(new Car
+            {
+                CarId = 3, BrandId = 3, CarName = "Volvo XC90 Recharge", ColorId = 3, DailyPrice = 1100,
+                ModelYear = 2021,
+                Description = "Lorem ipsum dolor sit amet"
+            });
 
             foreach (var car in carManager.GetAll())
             {
-                Console.WriteLine($"Id: {car.CarId} CarName: {car.CarName} BrandId: {car.BrandId} ColorId: {car.ColorId} DailyPrice: {car.DailyPrice}");
+                Console.WriteLine(
+                    $"Id: {car.CarId} CarName: {car.CarName} BrandId: {car.BrandId} ColorId: {car.ColorId} DailyPrice: {car.DailyPrice}");
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -30,6 +31,11 @@ namespace Business.Concrete
             return _carDal.GetAll(c => c.ColorId == id);
         }
 
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
+        }
+
         public void Add(Car car)
         {
             // Standart Versiyon
@@ -54,7 +60,9 @@ namespace Business.Concrete
 
         public void Delete(Car car)
         {
-            _carDal.Update(car);
+            _carDal.Delete(car);
         }
+
+       
     }
 }
