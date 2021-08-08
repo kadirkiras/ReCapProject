@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -16,53 +18,49 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            if (DateTime.Now.Hour == 10)
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return _carDal.GetAll(c => c.BrandId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id));
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return _carDal.GetAll(c => c.ColorId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
+            // if (DateTime.Now.Hour == 11)
+            //     return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            // Standart Versiyon
-            // if (car.CarName.Length >= 2 && car.DailyPrice > 0)
-            // {
-            //     _carDal.Add(car);
-            //     Console.WriteLine($"Kayit Basarili");
-            // }else
-            // {
-            // Console.WriteLine("Araba ismi minimum 2 karakterli olmali & Gunluk ucreti ise 0`dan buyuk olmalidir!");
-            // }
-            // Alternatif version
-            if (car.CarName.Length < 2 && car.DailyPrice <= 0) return;
+            if (car.CarName.Length < 2 && car.DailyPrice <= 0)
+                return new ErrorResult(Messages.CarNameInvalid);
             _carDal.Add(car);
-            Console.WriteLine($"{car.CarName} Isimli Arac: Kayit Basarili");
+            return new SuccessResult(Messages.CarAdded);
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
             _carDal.Update(car);
+            return new SuccessResult();
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             _carDal.Delete(car);
+            return new SuccessResult();
         }
-
-       
     }
 }
